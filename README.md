@@ -48,16 +48,31 @@ npm install @firefly-monitor/react
 
 ### 浏览器端
 
+#### 方式一：使用 init 函数（推荐）
+
 ```typescript
-import BrowserMonitor from '@firefly-monitor/browser';
+import { init, Errors, Metrics } from '@firefly-monitor/browser'
+
+const monitoring = init({
+  dsn: 'http://localhost:8080/api/v1/monitoring/reactqL9vG',
+  integrations: [new Errors(), new Metrics()],
+})
+```
+
+#### 方式二：使用 BrowserMonitor 类
+
+```typescript
+import BrowserMonitor, { Errors, Metrics, Behavior } from '@firefly-monitor/browser';
 
 const monitor = new BrowserMonitor({
-  appId: 'your-app-id',
-  url: 'https://api.example.com/monitor',
-  enableError: true,
-  enablePerformance: true,
-  enableBehavior: true,
-  sampling: 1.0
+  dsn: 'http://localhost:8080/api/v1/monitoring/reactqL9vG',
+  integrations: [
+    new Errors(),
+    new Metrics(),
+    new Behavior()
+  ],
+  sampling: 1.0,
+  debug: false
 });
 
 monitor.track('custom_event', {
@@ -71,13 +86,14 @@ monitor.track('custom_event', {
 ```typescript
 import { createApp } from 'vue';
 import { FireflyVuePlugin } from '@firefly-monitor/vue';
+import { Errors, Metrics } from '@firefly-monitor/browser';
 import App from './App.vue';
 
 const app = createApp(App);
 
 app.use(FireflyVuePlugin, {
-  appId: 'your-app-id',
-  url: 'https://api.example.com/monitor'
+  dsn: 'http://localhost:8080/api/v1/monitoring/vueApp123',
+  integrations: [new Errors(), new Metrics()]
 });
 
 app.mount('#app');
@@ -86,11 +102,12 @@ app.mount('#app');
 ### React
 
 ```tsx
-import { MonitorErrorBoundary, BrowserMonitor } from '@firefly-monitor/react';
+import { MonitorErrorBoundary } from '@firefly-monitor/react';
+import { init, Errors, Metrics } from '@firefly-monitor/browser';
 
-const monitor = new BrowserMonitor({
-  appId: 'your-app-id',
-  url: 'https://api.example.com/monitor'
+const monitor = init({
+  dsn: 'http://localhost:8080/api/v1/monitoring/reactApp456',
+  integrations: [new Errors(), new Metrics()]
 });
 
 function App() {
@@ -100,6 +117,89 @@ function App() {
     </MonitorErrorBoundary>
   );
 }
+```
+
+## 🔌 集成插件
+
+Firefly Monitor SDK 采用插件化架构，提供以下内置集成插件：
+
+### Errors - 错误监控
+
+自动捕获和上报各类错误：
+
+- ✅ JavaScript 运行时错误
+- ✅ Promise 拒绝错误
+- ✅ 资源加载错误
+- ✅ 网络请求错误（xhr/fetch）
+
+```typescript
+import { init, Errors } from '@firefly-monitor/browser';
+
+const monitor = init({
+  dsn: 'your-dsn',
+  integrations: [new Errors()]
+});
+```
+
+### Metrics - 性能监控
+
+自动收集和上报性能指标：
+
+- ✅ Web Vitals 核心指标（CLS、FID、LCP、FCP、TTFB）
+- ✅ 页面导航时序（DNS、TCP、请求、响应等）
+- ✅ 资源加载时序（图片、脚本、样式等）
+
+```typescript
+import { init, Metrics } from '@firefly-monitor/browser';
+
+const monitor = init({
+  dsn: 'your-dsn',
+  integrations: [new Metrics()]
+});
+```
+
+### Behavior - 用户行为监控
+
+自动跟踪和上报用户行为：
+
+- ✅ 点击事件
+- ✅ 页面滚动
+- ✅ 页面可见性变化
+- ✅ 路由变化（支持 hash 和 history 模式）
+- ✅ 页面生命周期（pageshow/pagehide）
+
+```typescript
+import { init, Behavior } from '@firefly-monitor/browser';
+
+const monitor = init({
+  dsn: 'your-dsn',
+  integrations: [new Behavior()]
+});
+```
+
+### 自定义集成
+
+你也可以创建自定义集成插件：
+
+```typescript
+import { Integration, EventCallback } from '@firefly-monitor/browser';
+
+class CustomIntegration implements Integration {
+  name = 'CustomIntegration';
+
+  setupOnce(
+    addCallback: (callback: EventCallback) => void,
+    getCurrentMonitor: () => unknown
+  ): void {
+    const monitor = getCurrentMonitor();
+    // 实现你的监控逻辑
+  }
+}
+
+const monitor = init({
+  dsn: 'your-dsn',
+  integrations: [new CustomIntegration()]
+});
 ```
 
 ## 📚 文档

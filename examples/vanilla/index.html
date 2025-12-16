@@ -46,12 +46,20 @@
 
   <script src="../../packages/browser/dist/index.umd.js"></script>
   <script>
-    // 初始化监控
-    const monitor = new FireflyMonitor.default({
-      appId: 'vanilla-example',
-      url: 'https://api.example.com/monitor',
+    // 使用插件化方式初始化监控
+    const { init, Errors, Metrics, Behavior } = FireflyMonitor;
+    
+    const monitoring = init({
+      dsn: 'http://localhost:8080/api/v1/monitoring/vanillaExample',
+      integrations: [
+        new Errors(),
+        new Metrics(),
+        new Behavior()
+      ],
       debug: true
     });
+
+    console.log('Firefly Monitor SDK 已初始化');
 
     function throwError() {
       throw new Error('这是一个测试错误');
@@ -62,7 +70,7 @@
     }
 
     function customTrack() {
-      monitor.track('button_click', {
+      monitoring.track('button_click', {
         buttonName: '自定义事件按钮',
         timestamp: Date.now()
       });
