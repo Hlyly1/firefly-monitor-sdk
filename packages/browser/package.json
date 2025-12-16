@@ -1,0 +1,37 @@
+{
+  "name": "@firefly-monitor/browser",
+  "version": "0.1.0",
+  "description": "Firefly Monitor SDK - Browser integration",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "browser": "dist/index.umd.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "rollup -c -w",
+    "build": "rollup -c",
+    "clean": "rimraf dist",
+    "type-check": "tsc --noEmit",
+    "test": "jest"
+  },
+  "keywords": [
+    "monitor",
+    "browser",
+    "web-vitals",
+    "performance"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hlyly1/firefly-monitor-sdk.git",
+    "directory": "packages/browser"
+  },
+  "dependencies": {
+    "@firefly-monitor/core": "workspace:*",
+    "@firefly-monitor/shared": "workspace:*",
+    "web-vitals": "^3.5.0"
+  }
+}

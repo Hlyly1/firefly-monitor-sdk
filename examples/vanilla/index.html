@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firefly Monitor SDK - Vanilla JS Example</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .section {
+      margin: 30px 0;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Firefly Monitor SDK - Vanilla JS Example</h1>
+
+  <div class="section">
+    <h2>错误测试</h2>
+    <button onclick="throwError()">触发JS错误</button>
+    <button onclick="throwPromiseError()">触发Promise错误</button>
+  </div>
+
+  <div class="section">
+    <h2>自定义埋点</h2>
+    <button onclick="customTrack()">发送自定义事件</button>
+  </div>
+
+  <div class="section">
+    <h2>性能监控</h2>
+    <p>页面加载时自动采集性能数据</p>
+  </div>
+
+  <script src="../../packages/browser/dist/index.umd.js"></script>
+  <script>
+    // 初始化监控
+    const monitor = new FireflyMonitor.default({
+      appId: 'vanilla-example',
+      url: 'https://api.example.com/monitor',
+      debug: true
+    });
+
+    function throwError() {
+      throw new Error('这是一个测试错误');
+    }
+
+    function throwPromiseError() {
+      Promise.reject(new Error('这是一个Promise错误'));
+    }
+
+    function customTrack() {
+      monitor.track('button_click', {
+        buttonName: '自定义事件按钮',
+        timestamp: Date.now()
+      });
+      alert('自定义事件已发送，请查看控制台');
+    }
+  </script>
+</body>
+</html>

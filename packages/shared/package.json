@@ -1,0 +1,29 @@
+{
+  "name": "@firefly-monitor/shared",
+  "version": "0.1.0",
+  "description": "Firefly Monitor SDK - Shared utilities and types",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "rollup -c -w",
+    "build": "rollup -c",
+    "clean": "rimraf dist",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "monitor",
+    "shared",
+    "utilities"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hlyly1/firefly-monitor-sdk.git",
+    "directory": "packages/shared"
+  }
+}
